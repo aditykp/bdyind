@@ -1,8 +1,8 @@
 # coffee_ui
 
-A new Flutter project. UI design by https://dribbble.com/shots/15475209-Coffee-Shop-Mobile-Apps-Dark-Mode
+[comment]: <> (A new Flutter project. UI design by https://dribbble.com/shots/15475209-Coffee-Shop-Mobile-Apps-Dark-Mode)
 
-<img src="Untitled.png" width=800 height=400>
+[comment]: <> (<img src="Untitled.png" width=800 height=400>)
 
 ## Getting Started
 
