@@ -1,6 +1,4 @@
-import 'package:budaya/pages/detail_budaya.dart';
 import 'package:budaya/pages/main_page.dart';
-import 'package:budaya/pages/detail_province.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,9 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Budaya Indonesia',
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (context) => MainPage(),
-        '/budaya': (context) => DetailBudaya(),
-        '/province': (context) => DetailProvince(),
+        '/': (context) => const MainPage(),
       },
     );
   }

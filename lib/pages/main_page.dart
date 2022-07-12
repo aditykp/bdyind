@@ -1,10 +1,8 @@
 import 'package:budaya/pages/province_page.dart';
 import 'package:budaya/pages/home_page.dart';
 import 'package:budaya/pages/nearby_page.dart';
-import 'package:budaya/pages/wishlist_page.dart';
 import 'package:flutter/material.dart';
 import 'package:budaya/theme.dart';
-import 'package:geolocator/geolocator.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -64,13 +62,13 @@ class _MainPageState extends State<MainPage> {
   Widget body() {
     switch (currentIndex) {
       case 0:
-        return HomePage();
+        return const HomePage();
       case 1:
-        return ProvincePage();
+        return const ProvincePage();
       case 2:
-        return NearbyPage();
+        return const NearbyPage();
       default:
-        return HomePage();
+        return const HomePage();
     }
   }
 

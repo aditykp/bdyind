@@ -1,13 +1,19 @@
+import 'package:budaya/models/ProvinceModel.dart';
+import 'package:budaya/pages/detail_budaya.dart';
+import 'package:budaya/pages/home_page.dart';
 import 'package:budaya/theme.dart';
-import 'package:budaya/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class BudayaCard extends StatelessWidget {
   final String title;
   final String text;
   final String imgUrl;
+  final Adat model;
+  final List<Budaya> otherBudaya;
   const BudayaCard({
     Key? key,
+    required this.model,
+    required this.otherBudaya,
     required this.title,
     required this.text,
     required this.imgUrl,
@@ -17,7 +23,14 @@ class BudayaCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/budaya');
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (c) => DetailBudaya(
+                  otherBudaya: otherBudaya,
+                      model: model,
+                  province: text,
+                    )));
       },
       child: Container(
         width: 190,
@@ -35,7 +48,7 @@ class BudayaCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(defaultRadius),
-                  child: Image.asset(
+                  child: Image.network(
                     imgUrl,
                     width: 180,
                     height: 180,

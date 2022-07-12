@@ -1,12 +1,15 @@
+import 'package:budaya/models/ProvinceModel.dart';
+import 'package:budaya/pages/detail_province.dart';
 import 'package:budaya/theme.dart';
-import 'package:budaya/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class ProvinceCard extends StatelessWidget {
+  final Datum model;
   final String title;
   final String imgUrl;
   const ProvinceCard({
     Key? key,
+    required this.model,
     required this.title,
     required this.imgUrl,
   }) : super(key: key);
@@ -15,7 +18,7 @@ class ProvinceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/province');
+        Navigator.push(context, MaterialPageRoute(builder: (c)=> DetailProvince(model: model)));
       },
       child: Container(
         width: 190,
@@ -33,7 +36,7 @@ class ProvinceCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(defaultRadius),
-                  child: Image.asset(
+                  child: Image.network(
                     imgUrl,
                     width: 180,
                     height: 180,

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:budaya/models/ProvinceModel.dart';
 import 'package:budaya/theme.dart';
 import 'package:budaya/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,8 @@ import 'package:readmore/readmore.dart';
 import '../widgets/special_tile.dart';
 
 class DetailProvince extends StatefulWidget {
-  const DetailProvince({Key? key}) : super(key: key);
+  final Datum model;
+  const DetailProvince({required this.model, Key? key}) : super(key: key);
 
   @override
   State<DetailProvince> createState() => _DetailProvinceState();
@@ -44,7 +46,7 @@ class _DetailProvinceState extends State<DetailProvince> {
             ),
             CustomButton(
               color: backgroundColor2,
-              onPressed: () => Navigator.pushNamed(context, '/'),
+              onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/', (Route<dynamic> route) => false),
               child: Icon(
                 Icons.home,
                 size: 32,
@@ -65,8 +67,8 @@ class _DetailProvinceState extends State<DetailProvince> {
           bottomLeft: Radius.circular(30),
           bottomRight: Radius.circular(30),
         ),
-        child: Image.asset(
-          'assets/images/patung.jpg',
+        child: Image.network(
+          '${widget.model.picture}',
           width: displayWidth(context),
           height: displayHeight(context) * 0.65,
           fit: BoxFit.cover,
@@ -82,7 +84,7 @@ class _DetailProvinceState extends State<DetailProvince> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Bali',
+                '${widget.model.name}',
                 style: whiteTextStyle.copyWith(
                   fontSize: 22,
                   fontWeight: medium,
@@ -110,8 +112,7 @@ class _DetailProvinceState extends State<DetailProvince> {
               height: displayHeight(context) * 0.10,
               color: backgroundColor1.withOpacity(0.4),
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: defaultMargin, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: defaultMargin, vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -164,16 +165,34 @@ class _DetailProvinceState extends State<DetailProvince> {
     }
 
     Widget specials() {
+      var _model = widget.model;
       return Container(
         margin: const EdgeInsets.only(top: 14),
         child: Column(
           children: [
-            SpecialTile(imgUrl: 'assets/images/raja4.jpg', text: 'Papua Barat'),
+            ///pakaian adat
             SpecialTile(
-                imgUrl: 'assets/images/rumah_kaki_seribu.jpg',
-                text: 'Rumah Adat'),
+              imgUrl: '${_model.pakaianAdat!.picture}',
+              text: '${_model.pakaianAdat!.title}',
+              province: '${_model.name}',
+              model: _model.pakaianAdat!,
+            ),
+
+            ///rumah adat
             SpecialTile(
-                imgUrl: 'assets/images/suanggi.jpg', text: 'Pakaian Adat')
+              imgUrl: '${_model.rumahAdat!.picture}',
+              text: '${_model.rumahAdat!.title}',
+              province: '${_model.name}',
+              model: _model.rumahAdat!,
+            ),
+
+            ///tarian adat
+            SpecialTile(
+              imgUrl: '${_model.tarianAdat!.picture}',
+              text: '${_model.tarianAdat!.title}',
+              province: '${_model.name}',
+              model: _model.tarianAdat!,
+            ),
           ],
         ),
       );
@@ -189,11 +208,7 @@ class _DetailProvinceState extends State<DetailProvince> {
             style: greyTextStyle.copyWith(fontSize: 16),
           ),
           const SizedBox(height: 20),
-          descriptionText('''
-Di awal kemerdekaan, Bali merupakan bagian dari Provinsi Sunda Kecil bersama Nusa Tenggara Barat (NTB) dan Nusa Tenggara Timur (NTT). Provinsi Bali dibentuk pertama kali pada 14 Agustus 1958. Pembentukannya ditetapkan berdasarkan Undang-Undang Nomor 64 Tahun 1958 tentang Pembentukan Daerah-daerah Tingkat Bali, Nusa Tenggara Barat, dan Nusa Tenggara Timur
-Ketika itu, ibukotanya adalah singaraja dan pada tahun 1960 dipindah ke Kota Denpasar. \n
-Luas wilayah Bali mencapai 5.780,06 kilometer persegi atau 0,29 persen dari luas wilayah Indonesia. Populasi pendudukannya 4,33 juta jiwa pada tahun 2019.
-'''),
+          descriptionText('''${widget.model.description}'''),
           budayaTitle(),
           specials(),
         ],

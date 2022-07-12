@@ -1,23 +1,25 @@
 import 'dart:ui';
 
+import 'package:budaya/models/ProvinceModel.dart';
 import 'package:budaya/theme.dart';
 import 'package:budaya/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
 
 import '../widgets/special_tile.dart';
+import 'home_page.dart';
 
 class DetailBudaya extends StatefulWidget {
-  const DetailBudaya({Key? key}) : super(key: key);
+  final Adat model;
+  final String province;
+  final List<Budaya>? otherBudaya;
+  const DetailBudaya({required this.model, required this.province, this.otherBudaya, Key? key}) : super(key: key);
 
   @override
   State<DetailBudaya> createState() => _DetailBudayaState();
 }
 
 class _DetailBudayaState extends State<DetailBudaya> {
-  bool favorite = false;
-  int index = 0;
-
   Widget header() {
     Widget topButton() {
       return Container(
@@ -44,7 +46,7 @@ class _DetailBudayaState extends State<DetailBudaya> {
             ),
             CustomButton(
               color: backgroundColor2,
-              onPressed: () => Navigator.pushNamed(context, '/'),
+              onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/', (Route<dynamic> route) => false),
               child: Icon(
                 Icons.home,
                 size: 32,
@@ -65,8 +67,8 @@ class _DetailBudayaState extends State<DetailBudaya> {
           bottomLeft: Radius.circular(30),
           bottomRight: Radius.circular(30),
         ),
-        child: Image.asset(
-          'assets/images/rumbai.jpg',
+        child: Image.network(
+          '${widget.model.picture}',
           width: displayWidth(context),
           height: displayHeight(context) * 0.65,
           fit: BoxFit.cover,
@@ -82,7 +84,7 @@ class _DetailBudayaState extends State<DetailBudaya> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Rumbai',
+                '${widget.model.title}',
                 style: whiteTextStyle.copyWith(
                   fontSize: 22,
                   fontWeight: medium,
@@ -90,7 +92,7 @@ class _DetailBudayaState extends State<DetailBudaya> {
                 ),
               ),
               Text(
-                'Papua Barat',
+                widget.province,
                 style: greyTextStyle.copyWith(fontSize: 16),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -115,8 +117,7 @@ class _DetailBudayaState extends State<DetailBudaya> {
               height: displayHeight(context) * 0.13,
               color: backgroundColor1.withOpacity(0.6),
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: defaultMargin, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: defaultMargin, vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -159,29 +160,43 @@ class _DetailBudayaState extends State<DetailBudaya> {
     }
 
     Widget budayaTitle() {
-      return Padding(
-        padding: const EdgeInsets.only(top: 20, bottom: 15),
-        child: Text(
-          'Budaya',
-          style: greyTextStyle.copyWith(fontSize: 16),
-        ),
-      );
+      if (widget.otherBudaya != null) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 20, bottom: 15),
+          child: Text(
+            'Budaya lainnya',
+            style: greyTextStyle.copyWith(fontSize: 16),
+          ),
+        );
+      } else {
+        return const Offstage();
+      }
     }
 
     Widget specials() {
-      return Container(
-        margin: const EdgeInsets.only(top: 14),
-        child: Column(
-          children: [
-            SpecialTile(imgUrl: 'assets/images/raja4.jpg', text: 'Papua Barat'),
-            SpecialTile(
-                imgUrl: 'assets/images/rumah_kaki_seribu.jpg',
-                text: 'Rumah Adat'),
-            SpecialTile(
-                imgUrl: 'assets/images/suanggi.jpg', text: 'Pakaian Adat')
-          ],
-        ),
-      );
+      List<Budaya> _budayaLain;
+      if (widget.otherBudaya != null) {
+        _budayaLain = widget.otherBudaya!;
+        _budayaLain.removeWhere((e) => e.budaya.title == widget.model.title);
+
+        return Container(
+          margin: const EdgeInsets.only(top: 14),
+          child: Column(
+            children: [
+              for (var i in _budayaLain)
+                SpecialTile(
+                  imgUrl: '${i.budaya.picture}',
+                  province: i.province,
+                  text: '${i.budaya.title}',
+                  model: i.budaya,
+                  otherBudaya: widget.otherBudaya,
+                )
+            ],
+          ),
+        );
+      } else {
+        return const Offstage();
+      }
     }
 
     return Container(
@@ -194,10 +209,7 @@ class _DetailBudayaState extends State<DetailBudaya> {
             style: greyTextStyle.copyWith(fontSize: 16),
           ),
           const SizedBox(height: 20),
-          descriptionText('''
- rumbai merupakan rok yang dibuat dari daun sagu kering yang disusun sebagai penutup di bagian bawah tubuh.\n
-Rok rumbai bisa digunakan oleh perempuan namun bisa juga digunakan oleh laki-laki.
-'''),
+          descriptionText('''${widget.model.description}'''),
           budayaTitle(),
           specials(),
         ],
